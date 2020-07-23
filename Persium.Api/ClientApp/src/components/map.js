@@ -1,10 +1,12 @@
 import React, { PureComponent, useState, useEffect } from 'react'
 import { TileLayer, Popup, Marker, Map } from 'react-leaflet';
 import { UserService, MainService } from "rhq-infrastructure";
-import Humidity from './icons/humidity';
-import Pressure from './icons/pressure';
-import Battery from './icons/battery';
+
+// import Battery from './icons/battery';
 import LocateControl from "./LocationControl"
+import Battery from './icons/battery';
+import Temperature from './icons/temperature';
+import MarkerPopup from './views/markerpopup';
 const containerStyle = {
   width: '400px',
   height: '400px'
@@ -14,34 +16,8 @@ const center = {
   lat: 53.542212,
   lng: -0.164806
 };
-const classes = {
-  popup : {
-    display : 'flex',
-    flexDirection : 'column'
-  }
-}
-const markerPopUp = (sniffer) => {
-  const { battery, chipT, dateTime, dateTimeRcvd, devID, humidity, pressure, recNo, rssi,
-    temperature, vref } = sniffer;
-  return (
-    <Popup>
-      <div style={classes.popup}>
 
-        <div>
-          <Battery/> : {battery}
-        </div>
-        <div>
-          <Pressure/> : {pressure}
 
-        </div>
-        <div>
-          <Humidity /> : {pressure}
-        </div>
-      </div>
-
-    </Popup>
-  )
-}
 
 
 const renderMarker = (sniffers) => {
@@ -54,7 +30,7 @@ const renderMarker = (sniffers) => {
 
     return (
       < Marker position={position} >
-        {markerPopUp(sniffer)}
+        {MarkerPopup(sniffer)}
       </Marker >
     )
 

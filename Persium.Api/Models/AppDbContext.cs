@@ -10,9 +10,11 @@ namespace AirSniffer.Api.Models
     {
         public string ConnectionString { get; set; }
 
+       
         public AppDbContext(string connectionString)
         {
             this.ConnectionString = connectionString;
+            FetchSensors();
         }
 
         private MySqlConnection GetConnection()
@@ -20,7 +22,43 @@ namespace AirSniffer.Api.Models
             return new MySqlConnection(ConnectionString);
         }
 
+        public List<GasSensorModel> GasSensors { set; get; }
 
+        private void FetchSensors()
+        {
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                List<GasSensorModel> list = new List<GasSensorModel>();
+
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand($"SELECT * FROM SnifferBot.gassensors ", conn);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new GasSensorModel()
+                        {
+                            deviceID = reader[nameof(GasSensorModel.deviceID)].ToString(),
+                            location = Convert.ToInt32(reader[nameof(GasSensorModel.location)]),
+                            R1 = Convert.ToDouble(reader[nameof(GasSensorModel.R1)]),
+                            R2 = Convert.ToDouble(reader[nameof(GasSensorModel.R2)]),
+                            recno = Convert.ToInt32(reader[nameof(GasSensorModel.recno)]),
+                            sensitivity = Convert.ToDouble(reader[nameof(GasSensorModel.sensitivity)]),
+                            sensorID = reader[nameof(GasSensorModel.sensorID)].ToString(),
+                            type = reader[nameof(GasSensorModel.type)].ToString(),
+
+
+
+
+                        });
+                    }
+                }
+                GasSensors = list;
+            }
+
+        }
         public List<DataModel> GetAllSniffers()
         {
             List<DataModel> list = new List<DataModel>();
@@ -28,7 +66,7 @@ namespace AirSniffer.Api.Models
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM SnifferBot.data   group by deviceID order by dataTimeRcvd desc", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM  SnifferBot.data where dataTimeRcvd in  (select max(dataTimeRcvd) from  SnifferBot.data group by deviceID) ", conn);
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -80,10 +118,16 @@ namespace AirSniffer.Api.Models
                     }
                 }
             }
+
+            
             return list;
         }
 
-
+        internal GasSensorModel GetSensor(string deviceID, int location)
+        {
+            return GasSensors.Where(s => s.deviceID == deviceID && s.location == location).FirstOrDefault();
+           
+        }
 
         public class DataModel
         {
