@@ -1,69 +1,94 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Popup } from 'react-leaflet';
 
 import Humidity from '../icons/humidity';
 import Pressure from '../icons/pressure';
 import GasTable from './gastable';
 import Temperature from '../icons/temperature';
-import { Grid } from '@material-ui/core';
+import { Grid, Chip, Tooltip, Typography } from '@material-ui/core';
+import { divIcon } from 'leaflet';
+import Wind from '../icons/wind';
+import NorthDirection from '../icons/northdirection';
+import PopupSkeleton from './popupSkleton';
 const classes = {
     popup: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '300px',
+
+        minWidth: '600px',
         height: '300px'
     }
 }
-const MarkerPopup = (sniffer) => {
-    console.log('sniffer: ', sniffer);
-    const { battery, pressure, temperature, humidity } = sniffer;
+const MarkerPopup = ({ sniffer,loading }) => {
+
+    const {  pressure, temperature, humidity, horizontalWind, windDirection } = sniffer;
+    
+    
+
+
+
+    const tempertureContent = <Typography>
+        {`${temperature}`} &#8451;
+    </Typography>
     return (
-        <Popup>
+        <Popup minWidth={350} >
 
-            <Grid container spacing={1}>
-
-
-                <Grid item xs={4}>
-                    <Temperature />  {temperature} &#8451;
-                </Grid>
-                <Grid item xs={4}>
-                    <Pressure />  {pressure} hPa
-                </Grid>
-                <Grid item xs={4}>
-                    <Humidity />  {humidity} %
-                </Grid>
+            {(loading && <PopupSkeleton />) ||
+               ( <Grid container justify='center' spacing={2}>
 
 
+                    <Grid item >
+                        <Tooltip placement='top' title="temperature in Celsius degrees">
+                            <Chip
+                                label={tempertureContent}
+                                icon={<Temperature />}
+                            />
+                        </Tooltip>
+                    </Grid>
+                    <Grid item >
+                        <Tooltip placement='top' title="pressure in hecto pascal">
+                            <Chip label={<Typography noWrap >
+                                {pressure} hPa
+                    </Typography>} icon={<Pressure />} />
+                        </Tooltip>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <GasTable sniffer={sniffer} />
+                    <Grid item>
+                        <Tooltip placement='top' title="humidity in percent">
+                            <Chip label={<Typography>
+                                {humidity} %
+                </Typography>} icon={<Humidity />} />
 
-                </Grid>
+                        </Tooltip>
+                    </Grid>
+                    <Grid item >
+                        <Tooltip placement='top' title="Horisontal wind ">
+                            <Chip label={<Typography>
+                                {horizontalWind} m/s
+                </Typography>} icon={<Wind />} />
 
-            </Grid>
+                        </Tooltip>
+                    </Grid>
+
+                    <Grid item >
+                        <Tooltip placement='top' title="Wind direction ">
+                            <Chip label={<Typography>
+                                {windDirection} <sup>&deg;</sup>
+                            </Typography>} icon={<NorthDirection />} />
+
+                        </Tooltip>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <GasTable sniffer={sniffer} />
+
+                    </Grid>
+
+                </Grid>)
+
+            }
 
 
 
 
-
-            {/* <div style={classes.popup}>
-
-                <div>
-                    <Temperature /> : {temperature}
-                </div>
-                <div>
-                    <Pressure /> : {pressure}
-
-                </div>
-                <div>
-                    <Humidity /> : {humidity}
-                </div>
-
-                <div>
-                    <GasTable sniffer={sniffer} />
-                </div>
-
-            </div> */}
 
         </Popup>
     )

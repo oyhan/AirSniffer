@@ -19,18 +19,18 @@ const useStyles = makeStyles({
 
 
 export default function GasTable({sniffer}) {
-    console.log('sniffer222: ', sniffer);
+    
   const classes = useStyles();
   const rows = Object.entries(sniffer).filter(k=>k[0].indexOf("s")==0  && k[1]!=null).map(s=>s[1]);
-  console.log('rows: ', rows);
+  
   return (
     <TableContainer component={Paper}>
       <Table size="small" className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Gas</TableCell>
-            <TableCell align="right">ppm</TableCell>
-            <TableCell align="right">m<sup>3</sup></TableCell>
+            <TableCell >ppm</TableCell>
+            <TableCell >&micro;g/m<sup>3</sup></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -39,8 +39,8 @@ export default function GasTable({sniffer}) {
               <TableCell component="th" scope="row">
                 {row.type}
               </TableCell>
-              <TableCell align="right">{row.ppm}</TableCell>
-              <TableCell align="right">{row.cubicMetter}</TableCell>
+              <TableCell >{row.ppm}</TableCell>
+              <TableCell >{row.cubicMetter}</TableCell>
             </TableRow>
           ))}
         </TableBody>

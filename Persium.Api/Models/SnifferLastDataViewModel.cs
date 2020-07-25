@@ -33,7 +33,7 @@ namespace AirSniffer.Api.Models
     public class SensorViewModel
     {
         public string Type { get; set; }
-        public double Ppm { get; set; }
-        public double CubicMetter { get; set; }
+        public string Ppm { get; set; }
+        public string CubicMetter { get; set; }
     }
 }

@@ -5,7 +5,14 @@
   height: 400px;
   width: 100%;
 }
+@font-face {
+  font-family: "OpenSans";
+  src: url('./assets/fonts/OpenSans-Light.ttf');
+}
 
+body{
+  font-family: OpenSans;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
