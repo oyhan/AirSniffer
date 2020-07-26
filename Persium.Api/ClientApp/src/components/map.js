@@ -46,7 +46,7 @@ const RenderMarker = ({ sniffers }) => {
         onclick={markerClick(sniffer)}
         position={position} >
 
-        {data && <MarkerPopup loading={loading} sniffer={data} />}
+        {data && <MarkerPopup loading={loading} sniffer={data} image={sniffer.photo} />}
       </Marker >
     )
 
@@ -70,7 +70,7 @@ export default function MyGoogleMap() {
 
     MainService.Get("sniffer/listsniffers").then(list => {
 
-      state.sniffers = list;
+      // state.sniffers = list;
       setState({ ...state, sniffers: list });
     })
   }, [])
@@ -86,12 +86,12 @@ export default function MyGoogleMap() {
   const position = [state.lat, state.lng]
 
   return (
-    <Map center={position} zoom={state.zoom}>
+    <Map  center={position} zoom={state.zoom}>
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <LocateControl options={locateOptions} startDirectly />
+      {/* <LocateControl options={locateOptions} startDirectly /> */}
       <RenderMarker sniffers={state.sniffers} />
 
     </Map>

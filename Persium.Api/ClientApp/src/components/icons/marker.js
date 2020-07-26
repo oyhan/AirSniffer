@@ -16,9 +16,9 @@ const snifferMarker = new L.Icon({
     iconUrl: markerIcon,
     shadowUrl: markerShadow,
 
-    iconSize:     [29, 50], // size of the icon
+    iconSize:     [29, 41], // size of the icon
     shadowSize:   [35, 50], // size of the shadow
-    iconAnchor:   [23, 16], // point of the icon which will correspond to marker's location
+    iconAnchor:   [23, 8], // point of the icon which will correspond to marker's location
     shadowAnchor: [19, 16],  // the same for the shadow
     popupAnchor:  [-8, -16] // point from which the popup should open relative to the iconAnchor
 });
